@@ -1,0 +1,11 @@
+{
+  "name": "grupr",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Diane <diane.maniere@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "cd backend && yarn start",
+    "start:dev": "cd backend && yarn start:dev"
+  }
+}
