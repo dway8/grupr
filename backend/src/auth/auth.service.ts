@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { User } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +20,7 @@ export class AuthService {
     return Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit code
   }
 
-  async requestSignup(phoneNumber: string) {
+  async requestSignup(phoneNumber: string): Promise<{ message: string }> {
     const verificationCode = this.generateVerificationCode();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
 
@@ -36,7 +36,7 @@ export class AuthService {
     return { message: 'Verification code sent' };
   }
 
-  async validateUser(phoneNumber: string): Promise<any> {
+  async validateUser(phoneNumber: string): Promise<User | null> {
     const user = await this.userService.findByPhoneNumber(phoneNumber);
     if (user) {
       const { ...result } = user;
@@ -45,14 +45,17 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login(user: User): Promise<{ access_token: string }> {
     const payload = { phoneNumber: user.phoneNumber, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 
-  async verifySignup(phoneNumber: string, verificationCode: string) {
+  async verifySignup(
+    phoneNumber: string,
+    verificationCode: string,
+  ): Promise<{ access_token: string }> {
     const signupRequest = await this.prisma.signupRequest.findUnique({
       where: { phoneNumber },
     });

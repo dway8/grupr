@@ -1,4 +1,3 @@
-// src/auth/jwt-auth.guard.ts
 import {
   Injectable,
   ExecutionContext,
@@ -8,10 +7,11 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  handleRequest(err, user, info) {
-    if (err || !user) {
-      throw err || new UnauthorizedException();
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest();
+    if (request.user) {
+      return true;
     }
-    return user;
+    throw new UnauthorizedException();
   }
 }
