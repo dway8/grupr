@@ -26,4 +26,15 @@ model User {
   phoneNumber String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  profile   Profile?
+}
+
+model Profile {
+  id          Int      @id @default(autoincrement())
+  firstName   String
+  dateOfBirth DateTime
+  city        String
+  country     String
+  userId      Int      @unique
+  user        User     @relation(fields: [userId], references: [id])
 }

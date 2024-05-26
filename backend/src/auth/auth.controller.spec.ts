@@ -5,7 +5,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { VerifyUserDto } from './dto/verify-user.dto';
 import { PhoneNumberDto } from './dto/phone-number.dto';
 import { UnauthorizedException } from '@nestjs/common';
-import { User } from 'src/user/entities/user.entity';
+import { User } from '@prisma/client';
 
 describe('AuthController', () => {
   let authController: AuthController;

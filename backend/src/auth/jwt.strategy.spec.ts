@@ -55,7 +55,6 @@ describe('JwtStrategy', () => {
       expect(result).toEqual({
         userId: payload.sub,
         phoneNumber: payload.phoneNumber,
-        user,
       });
       expect(userService.findById).toHaveBeenCalledWith(payload.sub);
     });
