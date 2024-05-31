@@ -35,6 +35,8 @@ model Profile {
   dateOfBirth DateTime
   city        String
   country     String
+  latitude    Float
+  longitude   Float
   userId      Int      @unique
   user        User     @relation(fields: [userId], references: [id])
 }

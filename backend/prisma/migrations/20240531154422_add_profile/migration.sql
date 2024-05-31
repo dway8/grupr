@@ -5,6 +5,8 @@ CREATE TABLE "Profile" (
     "dateOfBirth" TIMESTAMP(3) NOT NULL,
     "city" TEXT NOT NULL,
     "country" TEXT NOT NULL,
+    "latitude" DOUBLE PRECISION NOT NULL,
+    "longitude" DOUBLE PRECISION NOT NULL,
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")

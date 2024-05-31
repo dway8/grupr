@@ -18,6 +18,11 @@ class _ProfileLocationScreenState extends State<ProfileLocationScreen> {
   final String proxyUrl = 'http://localhost:3002/places/autocomplete/json';
   List<dynamic> _predictions = [];
 
+  double? latitude;
+  double? longitude;
+  String? city;
+  String? country;
+
   Future<void> _autoCompleteSearch(String input) async {
     final String url =
         '$proxyUrl?input=$input&types=(cities)&language=en&key=$googleApiKey';
@@ -45,22 +50,20 @@ class _ProfileLocationScreenState extends State<ProfileLocationScreen> {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final components = data['result']['address_components'];
-        String? city;
-        String? country;
-        for (var component in components) {
-          if (component['types'].contains('locality')) {
-            city = component['long_name'];
-          }
-          if (component['types'].contains('country')) {
-            country = component['long_name'];
-          }
-        }
-        if (city != null && country != null) {
-          setState(() {
-            _locationController.text = '$city, $country';
-          });
-        }
+        final result = data['result'];
+        final components = result['address_components'];
+
+        setState(() {
+          latitude = result['geometry']['location']['lat'];
+          longitude = result['geometry']['location']['lng'];
+          city = components.firstWhere(
+              (c) => c['types'].contains('locality') ? true : false,
+              orElse: () => null)?["long_name"];
+          country = components.firstWhere(
+              (c) => c['types'].contains('country') ? true : false,
+              orElse: () => null)?["long_name"];
+          _locationController.text = '$city, $country';
+        });
       } else {
         print('Failed to load place details');
       }
@@ -69,31 +72,46 @@ class _ProfileLocationScreenState extends State<ProfileLocationScreen> {
     }
   }
 
+  bool _isLocationValid() {
+    return city != null &&
+        country != null &&
+        latitude != null &&
+        longitude != null;
+  }
+
   Future<void> submitProfile(
       BuildContext context, Map<String, dynamic> profileData) async {
-    final response = await http.post(
-      Uri.parse('http://localhost:3000/api/profile/create'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${profileData['accessToken']}',
-      },
-      body: jsonEncode(<String, String>{
-        'firstName': profileData['firstName']!,
-        'dateOfBirth': profileData['dob']!,
-        'city': _locationController.text.split(', ')[0],
-        'country': _locationController.text.split(', ')[1],
-      }),
-    );
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/home',
-        (Route<dynamic> route) => false,
+    if (_isLocationValid()) {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/api/profile/create'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${profileData['accessToken']}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'firstName': profileData['firstName']!,
+          'dateOfBirth': profileData['dob']!,
+          'city': city,
+          'country': country,
+          'latitude': latitude,
+          'longitude': longitude,
+        }),
       );
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/home',
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to create profile')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to create profile')),
+        const SnackBar(content: Text('Invalid location')),
       );
     }
   }

@@ -1,4 +1,4 @@
-import { IsString, IsDateString, IsNotEmpty } from 'class-validator';
+import { IsString, IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateProfileDto {
@@ -19,7 +19,7 @@ export class CreateProfileDto {
   dateOfBirth: string;
 
   @ApiProperty({
-    description: 'City where the user lives',
+    description: 'City where the user is located',
     example: 'New York',
   })
   @IsString()
@@ -27,10 +27,24 @@ export class CreateProfileDto {
   city: string;
 
   @ApiProperty({
-    description: 'Country where the user lives',
+    description: 'Country where the user is located',
     example: 'USA',
   })
   @IsString()
   @IsNotEmpty()
   country: string;
+
+  @ApiProperty({
+    description: 'Latitude',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  latitude: number;
+
+  @ApiProperty({
+    description: 'Longitude',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  longitude: number;
 }

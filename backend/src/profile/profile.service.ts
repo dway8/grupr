@@ -14,6 +14,8 @@ export class ProfileService {
         dateOfBirth: new Date(createProfileDto.dateOfBirth),
         city: createProfileDto.city,
         country: createProfileDto.country,
+        latitude: createProfileDto.latitude,
+        longitude: createProfileDto.longitude,
       },
     });
   }
