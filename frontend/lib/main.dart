@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grupr/config/theme/app_themes.dart';
+import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
+import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_event.dart';
+import 'package:grupr/features/event/presentation/pages/home/event_previews.dart';
+import 'package:grupr/injection_container.dart';
 
-import 'screens/home_screen.dart';
-import 'screens/profile_screen.dart';
-import 'screens/signup/phone_number_screen.dart';
-import 'screens/signup/profile_dob_screen.dart';
-import 'screens/signup/profile_firstname_screen.dart';
-import 'screens/signup/profile_location_screen.dart';
-import 'screens/signup/verification_code_screen.dart';
-
-void main() async {
-  await dotenv.load(fileName: ".env");
+Future<void> main() async {
+  await initializeDependencies();
   runApp(const MyApp());
 }
 
@@ -19,21 +16,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => PhoneNumberScreen(),
-        '/verification': (context) => VerificationCodeScreen(),
-        '/profile-firstname': (context) => ProfileFirstNameScreen(),
-        '/profile-dob': (context) => const ProfileDobScreen(),
-        '/profile-location': (context) => const ProfileLocationScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/profile': (context) => const ProfileScreen(),
-      },
+    return BlocProvider<RemoteEventPreviewsBloc>(
+      create: (context) => sl()..add(const GetEventPreviews()),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: theme(),
+          home: const EventPreviews()),
     );
   }
 }
