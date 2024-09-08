@@ -1,7 +1,14 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { EventsService } from './events.service';
 import { SearchEventsDto } from './dto/search-events.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('events')
 @Controller('events')
@@ -30,6 +37,8 @@ export class EventsController {
     status: 200,
     description: 'Returns a list of events matching the search criteria',
   })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   searchEvents(@Query() searchEventsDto: SearchEventsDto) {
     return this.eventsService.searchEvents(searchEventsDto);
   }
