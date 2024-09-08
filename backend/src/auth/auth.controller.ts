@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { VerifyUserDto } from './dto/verify-user.dto';
 import { PhoneNumberDto } from './dto/phone-number.dto';
 

@@ -27,6 +27,7 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   profile   Profile?
+  events Event[]
 }
 
 model Profile {
@@ -39,4 +40,22 @@ model Profile {
   longitude   Float
   userId      Int      @unique
   user        User     @relation(fields: [userId], references: [id])
+}
+
+model Event {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  location            String   // We'll store this as a string for now
+  latitude            Float
+  longitude           Float
+  date                DateTime
+  description         String
+  imageUrl            String?
+  spotifyPlaylistUrl  String?
+  userId           Int
+  user                User     @relation(fields: [userId], references: [id])
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([latitude, longitude])
 }
