@@ -42,6 +42,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+        manifestPlaceholders = [
+            'auth0Domain': auth0Domain,
+            'auth0Scheme': auth0Scheme,
+            'appAuthRedirectScheme': auth0Scheme
+        ]
     }
 
     buildTypes {

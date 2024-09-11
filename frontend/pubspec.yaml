@@ -45,6 +45,8 @@ dependencies:
   flutter_hooks: ^0.20.5
   cached_network_image: ^3.4.1
   dio: ^5.7.0
+  flutter_appauth: ^7.0.0
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:
