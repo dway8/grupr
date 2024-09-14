@@ -1,5 +1,7 @@
+import '../usecases/login.dart';
+
 abstract class AuthRepository {
-  Future<String?> login();
+  Future<LoginResult?> login();
   Future<String?> getAccessToken();
   Future<void> logout();
 }

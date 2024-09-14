@@ -1,5 +1,6 @@
 import 'package:grupr/features/auth/data/data_sources/remote/auth_api_service.dart';
 import 'package:grupr/features/auth/domain/repository/auth_repository.dart';
+import '../../domain/usecases/login.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthService _authService;
@@ -7,8 +8,18 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._authService);
 
   @override
-  Future<String?> login() {
-    return _authService.login();
+  Future<LoginResult> login() async {
+    try {
+      final result = await _authService.login();
+      if (result != null) {
+        return LoginResult.success(
+            token: result['accessToken']!, userId: result['userId']!);
+      } else {
+        return LoginResult.failure('Login failed');
+      }
+    } catch (e) {
+      return LoginResult.failure('An error occurred: ${e.toString()}');
+    }
   }
 
   @override

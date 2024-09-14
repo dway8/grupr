@@ -1,35 +1,59 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthService {
   final FlutterAppAuth _appAuth = const FlutterAppAuth();
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
-  Future<String?> login() async {
+  Future<Map<String, String>?> login() async {
     try {
+      final clientId = dotenv.env['AUTH0_CLIENT_ID'];
+      final domain = dotenv.env['AUTH0_DOMAIN'];
+      final audience = dotenv.env['AUTH0_AUDIENCE'];
+
+      if (clientId == null || domain == null || audience == null) {
+        throw Exception(
+            'Missing environment variables: ${clientId == null ? 'AUTH0_CLIENT_ID ' : ''}${domain == null ? 'AUTH0_DOMAIN ' : ''}${audience == null ? 'AUTH0_AUDIENCE' : ''}');
+      }
+
       final AuthorizationTokenResponse? result =
           await _appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
-          dotenv.env['AUTH0_CLIENT_ID']!,
+          clientId,
           'com.auth0.flutterapp://login-callback',
-          issuer: 'https://${dotenv.env['AUTH0_DOMAIN']}',
+          issuer: 'https://$domain',
           scopes: ['openid', 'profile', 'email'],
+          additionalParameters: {'audience': audience},
         ),
       );
 
       if (result != null) {
-        print('Login successful. Access token: ${result.accessToken}');
+        final accessToken = result.accessToken!;
+        final userId = _getUserIdFromToken(accessToken);
         await _secureStorage.write(
             key: 'refresh_token', value: result.refreshToken);
-        return result.accessToken;
-      } else {
-        print('Login failed: result is null');
+        return {
+          'accessToken': accessToken,
+          'userId': userId,
+        };
       }
     } catch (e, s) {
       print('Login error: $e - stack: $s');
     }
     return null;
+  }
+
+  String _getUserIdFromToken(String accessToken) {
+    try {
+      final decodedToken = JwtDecoder.decode(accessToken);
+      return decodedToken['sub'] ?? '';
+    } catch (e) {
+      print('*********** Error decoding token: $e');
+      print('*********** Access token: $accessToken');
+      return '';
+    }
   }
 
   Future<String?> getAccessToken() async {
