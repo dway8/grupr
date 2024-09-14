@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile_setup/profile_setup_bloc.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile_setup/profile_setup_event.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AddressPage extends StatefulWidget {
   const AddressPage({Key? key}) : super(key: key);
@@ -13,86 +14,72 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
-  late GoogleMapController _mapController;
-  LatLng _selectedLocation = const LatLng(0, 0);
   String _selectedCity = '';
   String _selectedCountry = '';
+  double _latitude = 0;
+  double _longitude = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentLocation();
-  }
+  final _cityController = TextEditingController();
 
-  Future<void> _getCurrentLocation() async {
-    final position = await Geolocator.getCurrentPosition();
+  void _onPlaceSelected(Prediction prediction) {
     setState(() {
-      _selectedLocation = LatLng(position.latitude, position.longitude);
-    });
-    _mapController.animateCamera(CameraUpdate.newLatLng(_selectedLocation));
-    _getAddressFromLatLng();
-  }
-
-  Future<void> _getAddressFromLatLng() async {
-    // Here you would typically use a geocoding service to get the city and country
-    // For this example, we'll just use placeholder values
-    setState(() {
-      _selectedCity = 'Sample City';
-      _selectedCountry = 'Sample Country';
+      _selectedCity = prediction.description?.split(',').first ?? '';
+      _selectedCountry = prediction.description?.split(',').last.trim() ?? '';
+      _cityController.text = prediction.description ?? '';
+      // Note: This package doesn't provide lat/lng directly. You might need to use another API call to get coordinates if needed.
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Your Location')),
-      body: Column(
-        children: [
-          Expanded(
-            child: GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: _selectedLocation,
-                zoom: 14,
+      appBar: AppBar(title: const Text('Enter Your Location')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            GooglePlaceAutoCompleteTextField(
+              textEditingController: _cityController,
+              googleAPIKey: dotenv.env['GOOGLE_MAPS_API_KEY']!,
+              inputDecoration: const InputDecoration(
+                labelText: 'City',
+                suffixIcon: Icon(Icons.search),
               ),
-              onMapCreated: (controller) => _mapController = controller,
-              onTap: (LatLng latLng) {
-                setState(() {
-                  _selectedLocation = latLng;
-                });
-                _getAddressFromLatLng();
+              debounceTime: 800,
+              isLatLngRequired: true,
+              getPlaceDetailWithLatLng: (Prediction prediction) {
+                _onPlaceSelected(prediction);
               },
-              markers: {
-                Marker(
-                  markerId: const MarkerId('selected_location'),
-                  position: _selectedLocation,
-                ),
+              itemClick: (Prediction prediction) {
+                _onPlaceSelected(prediction);
               },
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Text('Selected City: $_selectedCity'),
-                Text('Selected Country: $_selectedCountry'),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<ProfileSetupBloc>().add(
-                          SetAddress(
-                            city: _selectedCity,
-                            latitude: _selectedLocation.latitude,
-                            longitude: _selectedLocation.longitude,
-                            country: _selectedCountry,
-                          ),
-                        );
-                  },
-                  child: const Text('Next'),
-                ),
-              ],
+            SizedBox(height: 20),
+            Text('Selected City: $_selectedCity'),
+            Text('Selected Country: $_selectedCountry'),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                context.read<ProfileSetupBloc>().add(
+                      SetAddress(
+                        city: _selectedCity,
+                        latitude: _latitude,
+                        longitude: _longitude,
+                        country: _selectedCountry,
+                      ),
+                    );
+              },
+              child: const Text('Next'),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _cityController.dispose();
+    super.dispose();
   }
 }

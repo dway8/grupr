@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
-import '../../../../core/resources/data_state.dart';
-import '../../domain/entities/profile.dart';
-import '../../domain/repositories/profile_repository.dart';
-import '../models/profile_model.dart';
-import '../data_sources/remote/profile_api_service.dart';
+import 'package:grupr/core/resources/data_state.dart';
+import 'package:grupr/features/profile/domain/entities/profile.dart';
+import 'package:grupr/features/profile/domain/repositories/profile_repository.dart';
+import 'package:grupr/features/profile/data/models/profile_model.dart';
+import 'package:grupr/features/profile/data/data_sources/remote/profile_api_service.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileApiService _profileApiService;
@@ -14,6 +13,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<DataState<void>> createProfile(Profile profile) async {
+    print('Attempting to create profile for user: ${profile.userId}');
     try {
       final httpResponse = await _profileApiService.createProfile(
         ProfileModel(
@@ -27,10 +27,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
         ),
       );
 
+      print(
+          'Profile creation response status: ${httpResponse.response.statusCode}');
+
       if (httpResponse.response.statusCode == HttpStatus.created ||
           httpResponse.response.statusCode == HttpStatus.ok) {
+        print('Profile created successfully for user: ${profile.userId}');
         return const DataSuccess(null);
       } else {
+        print(
+            'Profile creation failed. Status: ${httpResponse.response.statusCode}, Message: ${httpResponse.response.statusMessage}');
         return DataFailed(
           DioException(
             error: httpResponse.response.statusMessage,
@@ -41,8 +47,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
         );
       }
     } on DioException catch (e) {
+      print('DioException occurred: ${e.message}');
       return DataFailed(e);
     } on SocketException catch (e) {
+      print('SocketException occurred: ${e.message}');
       return DataFailed(
         DioException(
           error: 'Please check your internet connection',
@@ -51,6 +59,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         ),
       );
     } catch (e) {
+      print('Unexpected error occurred: $e');
       return DataFailed(
         DioException(
           error: e.toString(),

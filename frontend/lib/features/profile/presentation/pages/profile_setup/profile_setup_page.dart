@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile_setup/profile_setup_bloc.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile_setup/profile_setup_state.dart';
+import 'package:grupr/features/profile/presentation/pages/profile_setup/first_name_page.dart';
 import 'package:grupr/features/profile/presentation/pages/profile_setup/address_page.dart';
 import 'package:grupr/features/profile/presentation/pages/profile_setup/date_of_birth_page.dart';
-import 'package:grupr/features/profile/presentation/pages/profile_setup/first_name_page.dart';
 import 'package:grupr/injection_container.dart';
 
 class ProfileSetupPage extends StatelessWidget {
@@ -16,38 +16,34 @@ class ProfileSetupPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<ProfileSetupBloc>(),
-      child: Scaffold(
-        appBar: AppBar(title: Text('Profile Setup')),
-        body: BlocBuilder<ProfileSetupBloc, ProfileSetupState>(
-          builder: (context, state) {
+      child: BlocBuilder<ProfileSetupBloc, ProfileSetupState>(
+        builder: (context, state) {
+          print('Current ProfileSetupState: $state');
+          try {
             if (state is ProfileSetupInitial) {
               return FirstNamePage();
             } else if (state is ProfileSetupFirstNameEntered) {
-              return AddressPage();
+              return const AddressPage();
             } else if (state is ProfileSetupAddressEntered) {
-              return DateOfBirthPage();
-            } else if (state is ProfileSetupLoading) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            } else if (state is ProfileSetupSuccess) {
-              // Navigate to the next screen after successful profile setup
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.of(context).pushReplacementNamed('/home');
-              });
-              return const Scaffold(
-                body: Center(child: Text('Profile created successfully!')),
-              );
+              return const DateOfBirthPage();
+            } else if (state is ProfileSetupDateOfBirthEntered) {
+              // Stay on the DateOfBirthPage after DOB is entered
+              return const DateOfBirthPage();
             } else if (state is ProfileSetupError) {
-              return Scaffold(
-                body: Center(child: Text('Error: ${state.message}')),
-              );
+              return Center(child: Text('Error: ${state.message}'));
+            } else if (state is ProfileSetupSuccess) {
+              return const Center(child: Text('Profile setup completed!'));
+            } else if (state is ProfileSetupLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return Center(child: Text('Unexpected state: $state'));
             }
-            return const Scaffold(
-              body: Center(child: Text('Unexpected state')),
-            );
-          },
-        ),
+          } catch (e, stackTrace) {
+            print('Error in ProfileSetupPage build: $e');
+            print('Stack trace: $stackTrace');
+            return const Center(child: Text('An unexpected error occurred'));
+          }
+        },
       ),
     );
   }
