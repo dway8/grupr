@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { EventsService } from './events.service';
 import { SearchEventsDto } from './dto/search-events.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('events')
 @Controller('events')
@@ -37,8 +37,8 @@ export class EventsController {
     status: 200,
     description: 'Returns a list of events matching the search criteria',
   })
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   searchEvents(@Query() searchEventsDto: SearchEventsDto) {
     return this.eventsService.searchEvents(searchEventsDto);
   }

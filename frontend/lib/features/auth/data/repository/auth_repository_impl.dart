@@ -11,6 +11,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<LoginResult> login() async {
     try {
       final result = await _authService.login();
+      print('Login result: $result');
       if (result != null) {
         return LoginResult.success(
             token: result['accessToken']!, userId: result['userId']!);
