@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 
 @Injectable()
-export class ProfileService {
+export class ProfilesService {
   constructor(private prisma: PrismaService) {}
 
   async createProfile(userId: number, createProfileDto: CreateProfileDto) {

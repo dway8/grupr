@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:grupr/core/network/api_client.dart';
 import 'package:grupr/features/auth/data/data_sources/remote/auth_api_service.dart';
 import 'package:grupr/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:grupr/features/auth/domain/repository/auth_repository.dart';
@@ -26,8 +27,11 @@ Future<void> initializeDependencies() async {
 
   // Services
   sl.registerLazySingleton(() => AuthService());
-  sl.registerLazySingleton(() => ProfileApiService(sl()));
+  sl.registerLazySingleton(() => ProfileApiService(sl<ApiClient>()));
   sl.registerSingleton<EventApiService>(EventApiService(sl()));
+
+  // Initialize ApiClient and pass AuthService
+  sl.registerSingleton<ApiClient>(ApiClient(sl<AuthService>()));
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));

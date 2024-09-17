@@ -9,8 +9,6 @@ export class EventsService {
   async searchEvents(searchEventsDto: SearchEventsDto) {
     const { lat, lon, startDate, endDate } = searchEventsDto;
 
-    console.log(typeof lat, typeof lon, typeof startDate, typeof endDate);
-
     const radius = 0.1;
 
     return this.prisma.event.findMany({

@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './users/users.module';
 import { PrismaService } from './prisma/prisma.service';
-import { ProfileModule } from './profile/profile.module';
+import { ProfilesModule } from './profiles/profiles.module';
 import { EventsModule } from './events/events.module';
 import { AuthModule } from './auth/auth.module';
 
@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     AuthModule,
     UserModule,
-    ProfileModule,
+    ProfilesModule,
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     EventsModule,

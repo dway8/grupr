@@ -6,6 +6,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 class AuthService {
   final FlutterAppAuth _appAuth = const FlutterAppAuth();
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  String? _accessToken;
 
   Future<Map<String, String>?> login() async {
     try {
@@ -32,6 +33,7 @@ class AuthService {
       if (result != null) {
         final accessToken = result.accessToken!;
         final userId = _getUserIdFromToken(accessToken);
+        _accessToken = accessToken;
         await _secureStorage.write(
             key: 'refresh_token', value: result.refreshToken);
         return {
@@ -57,13 +59,18 @@ class AuthService {
   }
 
   Future<String?> getAccessToken() async {
+    print('Getting access token');
+    if (_accessToken != null) {
+      return _accessToken;
+    }
+
     final storedRefreshToken = await _secureStorage.read(key: 'refresh_token');
     if (storedRefreshToken == null) {
       return null;
     }
 
     try {
-      final TokenResponse? result = await _appAuth.token(
+      final TokenResponse result = await _appAuth.token(
         TokenRequest(
           dotenv.env['AUTH0_CLIENT_ID']!,
           dotenv.env['AUTH0_REDIRECT_URI']!,
@@ -72,9 +79,9 @@ class AuthService {
         ),
       );
 
-      if (result != null) {
-        return result.accessToken;
-      }
+      _accessToken = result.accessToken;
+
+      return result.accessToken;
     } catch (e, s) {
       print('Error getting access token: $e - stack: $s');
     }
@@ -83,6 +90,7 @@ class AuthService {
   }
 
   Future<void> logout() async {
+    _accessToken = null;
     await _secureStorage.delete(key: 'refresh_token');
   }
 }

@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProfileService } from './profile.service';
+import { ProfilesService } from './profiles.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { PrismaClient, Profile } from '@prisma/client';
 
-describe('ProfileService', () => {
-  let service: ProfileService;
+describe('ProfilesService', () => {
+  let service: ProfilesService;
   let prismaService: PrismaService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ProfileService,
+        ProfilesService,
         {
           provide: PrismaService,
           useValue: new PrismaClient(), // Use PrismaClient for testing
@@ -19,7 +19,7 @@ describe('ProfileService', () => {
       ],
     }).compile();
 
-    service = module.get<ProfileService>(ProfileService);
+    service = module.get<ProfilesService>(ProfilesService);
     prismaService = module.get<PrismaService>(PrismaService);
   });
 

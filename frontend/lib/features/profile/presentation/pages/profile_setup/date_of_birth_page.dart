@@ -48,7 +48,6 @@ class _DateOfBirthPageState extends State<DateOfBirthPage> {
             if (_selectedDate != null)
               ElevatedButton(
                 onPressed: () {
-                  print('Submit button pressed');
                   final authState = context.read<AuthBloc>().state;
                   if (authState is AuthAuthenticated) {
                     print(

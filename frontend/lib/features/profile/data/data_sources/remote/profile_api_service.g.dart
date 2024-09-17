@@ -14,7 +14,7 @@ class _ProfileApiService implements ProfileApiService {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://localhost:4000/api';
+    baseUrl ??= 'http://192.168.1.107:3000/api';
   }
 
   final Dio _dio;
@@ -37,7 +37,7 @@ class _ProfileApiService implements ProfileApiService {
     )
         .compose(
           _dio.options,
-          '/api/profiles/create',
+          '/profiles/create',
           queryParameters: queryParameters,
           data: _data,
         )

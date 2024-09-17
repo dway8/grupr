@@ -18,7 +18,6 @@ class ProfileSetupPage extends StatelessWidget {
       create: (_) => sl<ProfileSetupBloc>(),
       child: BlocBuilder<ProfileSetupBloc, ProfileSetupState>(
         builder: (context, state) {
-          print('Current ProfileSetupState: $state');
           try {
             if (state is ProfileSetupInitial) {
               return FirstNamePage();
