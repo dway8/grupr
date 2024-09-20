@@ -13,22 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SignupRequest {
-  id             Int      @id @default(autoincrement())
-  phoneNumber    String   @unique
-  verificationCode String
-  createdAt      DateTime @default(now())
-  expiresAt      DateTime
-}
-
-model User {
-  id          Int      @id @default(autoincrement())
-  phoneNumber String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  profile   Profile?
-  events Event[]
-}
 
 model Profile {
   id          Int      @id @default(autoincrement())
@@ -38,8 +22,9 @@ model Profile {
   country     String
   latitude    Float
   longitude   Float
-  userId      Int      @unique
-  user        User     @relation(fields: [userId], references: [id])
+  userId      String      @unique
+
+  @@index(userId)
 }
 
 model Event {
@@ -52,10 +37,10 @@ model Event {
   description         String
   imageUrl            String?
   spotifyPlaylistUrl  String?
-  userId           Int
-  user                User     @relation(fields: [userId], references: [id])
+  userId              String
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
   @@index([latitude, longitude])
+  @@index(userId)
 }

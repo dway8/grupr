@@ -83,8 +83,6 @@ class ProfileSetupBloc extends Bloc<ProfileSetupEvent, ProfileSetupState> {
         return;
       }
 
-      print(
-          'All fields are present, proceeding with profile creation'); // Add this line
       emit(ProfileSetupLoading());
 
       final profile = Profile(
@@ -97,14 +95,12 @@ class ProfileSetupBloc extends Bloc<ProfileSetupEvent, ProfileSetupState> {
         country: _country!,
       );
 
-      print('Calling createProfile use case'); // Add this line
       final result = await createProfile(profile);
 
       if (result is DataSuccess) {
-        print('Profile creation successful'); // Add this line
         emit(ProfileSetupSuccess());
       } else if (result is DataFailed) {
-        print('Profile creation failed: ${result.error}'); // Add this line
+        print('Profile creation failed: ${result.error}');
         emit(ProfileSetupError(
             result.error?.toString() ?? 'An unknown error occurred'));
       }

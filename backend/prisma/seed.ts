@@ -4,47 +4,42 @@ import { faker } from '@faker-js/faker';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create 5 users with profiles
-  const users = [];
-  for (let i = 0; i < 5; i++) {
-    const user = await prisma.user.create({
-      data: {
-        phoneNumber: faker.phone.number(),
-        profile: {
-          create: {
-            firstName: faker.person.firstName(),
-            dateOfBirth: faker.date.past({ years: 30 }),
-            city: faker.location.city(),
-            country: faker.location.country(),
-            latitude: faker.location.latitude(),
-            longitude: faker.location.longitude(),
-          },
+  // Create 5 profiles
+  await prisma.profile.createMany({
+    data: Array.from({ length: 5 }).map(() => ({
+      firstName: faker.person.firstName(),
+      dateOfBirth: faker.date.past({ years: 20 }),
+      city: faker.location.city(),
+      country: faker.location.country(),
+      latitude: faker.location.latitude(),
+      longitude: faker.location.longitude(),
+      userId: faker.string.uuid(),
+    })),
+  });
+
+  // Create events for 4 profiles
+  for (let i = 0; i < 4; i++) {
+    const profile = await prisma.profile.findFirst({
+      skip: i,
+      take: 1,
+    });
+
+    const eventsCount = faker.number.int({ min: 1, max: 3 });
+
+    for (let j = 0; j < eventsCount; j++) {
+      await prisma.event.create({
+        data: {
+          name: faker.lorem.sentence(),
+          location: faker.location.city(),
+          latitude: faker.location.latitude(),
+          longitude: faker.location.longitude(),
+          date: faker.date.future(),
+          description: faker.lorem.paragraph(),
+          userId: profile.userId,
         },
-      },
-    });
-    users.push(user);
+      });
+    }
   }
-
-  // Create 10 events
-  for (let i = 0; i < 10; i++) {
-    await prisma.event.create({
-      data: {
-        name: faker.word.words(3),
-        location: faker.location.streetAddress(),
-        latitude: faker.location.latitude(),
-        longitude: faker.location.longitude(),
-        date: faker.date.future(),
-        description: faker.lorem.paragraph(),
-        imageUrl: faker.image.url(),
-        spotifyPlaylistUrl: faker.datatype.boolean()
-          ? faker.internet.url()
-          : null,
-        userId: users[Math.floor(Math.random() * users.length)].id,
-      },
-    });
-  }
-
-  console.log('Seed data created successfully');
 }
 
 main()

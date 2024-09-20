@@ -2,22 +2,14 @@ import '../../domain/entities/profile.dart';
 
 class ProfileModel extends Profile {
   ProfileModel({
-    required String userId,
-    required String firstName,
-    required DateTime dateOfBirth,
-    required String city,
-    required double latitude,
-    required double longitude,
-    required String country,
-  }) : super(
-          userId: userId,
-          firstName: firstName,
-          dateOfBirth: dateOfBirth,
-          city: city,
-          latitude: latitude,
-          longitude: longitude,
-          country: country,
-        );
+    required super.userId,
+    required super.firstName,
+    required super.dateOfBirth,
+    required super.city,
+    required super.latitude,
+    required super.longitude,
+    required super.country,
+  });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
@@ -32,6 +24,7 @@ class ProfileModel extends Profile {
   }
 
   Map<String, dynamic> toJson() {
+    print('*******userId: $userId');
     return {
       'userId': userId,
       'firstName': firstName,

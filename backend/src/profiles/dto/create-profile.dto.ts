@@ -47,4 +47,12 @@ export class CreateProfileDto {
   @IsNumber()
   @IsNotEmpty()
   longitude: number;
+
+  @ApiProperty({
+    description: 'Unique identifier for the user from Auth0',
+    example: 'auth0|12345',
+  })
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 }

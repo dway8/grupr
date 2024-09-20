@@ -6,12 +6,15 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 export class ProfilesService {
   constructor(private prisma: PrismaService) {}
 
-  async createProfile(userId: number, createProfileDto: CreateProfileDto) {
+  async createProfile(createProfileDto: CreateProfileDto) {
+    const dateOfBirth = new Date(createProfileDto.dateOfBirth);
+    dateOfBirth.setUTCHours(0, 0, 0, 0);
+
     return this.prisma.profile.create({
       data: {
-        userId,
+        userId: createProfileDto.userId,
         firstName: createProfileDto.firstName,
-        dateOfBirth: new Date(createProfileDto.dateOfBirth),
+        dateOfBirth,
         city: createProfileDto.city,
         country: createProfileDto.country,
         latitude: createProfileDto.latitude,

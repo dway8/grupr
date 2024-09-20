@@ -1,18 +1,17 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './users/users.module';
 import { PrismaService } from './prisma/prisma.service';
 import { ProfilesModule } from './profiles/profiles.module';
 import { EventsModule } from './events/events.module';
 import { AuthModule } from './auth/auth.module';
+import { LoggerMiddleware } from './logger.middleware';
 
 @Module({
   imports: [
     AuthModule,
-    UserModule,
     ProfilesModule,
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
@@ -22,4 +21,10 @@ import { AuthModule } from './auth/auth.module';
   providers: [AppService, PrismaService],
   exports: [PrismaService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

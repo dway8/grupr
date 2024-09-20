@@ -27,7 +27,6 @@ export class ProfilesController {
     @Request() req,
     @Body() createProfileDto: CreateProfileDto,
   ) {
-    const userId = req.user.userId;
-    return this.profileService.createProfile(userId, createProfileDto);
+    return this.profileService.createProfile(createProfileDto);
   }
 }
