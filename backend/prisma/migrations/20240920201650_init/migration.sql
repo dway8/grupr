@@ -1,13 +1,15 @@
 -- CreateTable
 CREATE TABLE "Profile" (
     "id" SERIAL NOT NULL,
-    "firstName" TEXT NOT NULL,
-    "dateOfBirth" TIMESTAMP(3) NOT NULL,
+    "first_name" TEXT NOT NULL,
+    "date_of_birth" TIMESTAMP(3) NOT NULL,
     "city" TEXT NOT NULL,
     "country" TEXT NOT NULL,
     "latitude" DOUBLE PRECISION NOT NULL,
     "longitude" DOUBLE PRECISION NOT NULL,
-    "userId" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
 );
@@ -21,23 +23,23 @@ CREATE TABLE "Event" (
     "longitude" DOUBLE PRECISION NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "description" TEXT NOT NULL,
-    "imageUrl" TEXT,
-    "spotifyPlaylistUrl" TEXT,
-    "userId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "image_url" TEXT,
+    "spotify_playlist_url" TEXT,
+    "user_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
+CREATE UNIQUE INDEX "Profile_user_id_key" ON "Profile"("user_id");
 
 -- CreateIndex
-CREATE INDEX "Profile_userId_idx" ON "Profile"("userId");
+CREATE INDEX "Profile_user_id_idx" ON "Profile"("user_id");
 
 -- CreateIndex
 CREATE INDEX "Event_latitude_longitude_idx" ON "Event"("latitude", "longitude");
 
 -- CreateIndex
-CREATE INDEX "Event_userId_idx" ON "Event"("userId");
+CREATE INDEX "Event_user_id_idx" ON "Event"("user_id");
