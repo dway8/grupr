@@ -37,7 +37,7 @@ class _ProfileApiService implements ProfileApiService {
     )
         .compose(
           _dio.options,
-          '/profiles/create',
+          '/profiles',
           queryParameters: queryParameters,
           data: _data,
         )

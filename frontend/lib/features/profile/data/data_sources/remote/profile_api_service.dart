@@ -12,6 +12,6 @@ abstract class ProfileApiService {
     return _ProfileApiService(apiClient.dio);
   }
 
-  @POST('/profiles/create')
+  @POST('/profiles')
   Future<HttpResponse<void>> createProfile(@Body() ProfileModel profile);
 }

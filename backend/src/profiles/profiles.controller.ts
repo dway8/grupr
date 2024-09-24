@@ -22,7 +22,7 @@ export class ProfilesController {
     description: 'The profile has been successfully created.',
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @Post('create')
+  @Post('')
   async createProfile(
     @Request() req,
     @Body() createProfileDto: CreateProfileDto,
