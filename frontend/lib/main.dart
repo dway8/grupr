@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grupr/config/theme/app_themes.dart';
 import 'package:grupr/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:grupr/features/auth/presentation/pages/login_page.dart';
-import 'package:grupr/features/event/presentation/pages/home/event_previews.dart';
+import 'package:grupr/features/event/domain/usecases/get_event_previews.dart';
+import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
+import 'package:grupr/features/event/presentation/pages/home/event_previews_page.dart';
 import 'package:grupr/features/profile/presentation/pages/profile_setup/profile_setup_page.dart';
 import 'package:grupr/injection_container.dart';
 
@@ -22,6 +24,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => sl<AuthBloc>()),
+        BlocProvider<RemoteEventPreviewsBloc>(
+          create: (_) => RemoteEventPreviewsBloc(sl<GetEventPreviewsUseCase>()),
+        ),
       ],
       child: MaterialApp(
         theme: theme(),
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
               if (needsProfileSetup) {
                 return ProfileSetupPage(userId: state.userId);
               } else {
-                return EventPreviews();
+                return EventPreviewsPage();
               }
             }
             return LoginPage();

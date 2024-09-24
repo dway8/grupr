@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_state.dart';
 
-class EventPreviews extends StatelessWidget {
-  const EventPreviews({super.key});
+class EventPreviewsPage extends StatelessWidget {
+  const EventPreviewsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
