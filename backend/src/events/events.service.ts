@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SearchEventsDto } from './dto/search-events.dto';
+import { LiteEventDto } from './dto/lite-event.dto';
 
 @Injectable()
 export class EventsService {
   constructor(private prisma: PrismaService) {}
 
-  async searchEvents(searchEventsDto: SearchEventsDto) {
+  async searchEvents(
+    searchEventsDto: SearchEventsDto,
+  ): Promise<LiteEventDto[]> {
     const { lat, lon, startDate, endDate } = searchEventsDto;
 
     const radius = 0.1;

@@ -8,7 +8,7 @@ part 'event_preview_api_service.g.dart';
 abstract class EventApiService {
   factory EventApiService(Dio dio) = _EventPreviewApiService;
 
-  @GET('/events/search')
+  @GET('/events')
   Future<HttpResponse<List<EventPreviewModel>>> getEventPreviews({
     @Query("lat") double? lat,
     @Query("lon") double? lon,

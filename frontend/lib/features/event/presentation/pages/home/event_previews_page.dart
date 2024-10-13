@@ -2,10 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
+import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_event.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_state.dart';
 
-class EventPreviewsPage extends StatelessWidget {
+class EventPreviewsPage extends StatefulWidget {
   const EventPreviewsPage({super.key});
+
+  @override
+  EventPreviewsPageState createState() => EventPreviewsPageState();
+}
+
+class EventPreviewsPageState extends State<EventPreviewsPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<RemoteEventPreviewsBloc>().add(const GetEventPreviews());
+  }
 
   @override
   Widget build(BuildContext context) {

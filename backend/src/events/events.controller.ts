@@ -9,13 +9,14 @@ import {
 import { EventsService } from './events.service';
 import { SearchEventsDto } from './dto/search-events.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { LiteEventDto } from './dto/lite-event.dto';
 
 @ApiTags('events')
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @Get('search')
+  @Get('')
   @ApiOperation({ summary: 'Search for events' })
   @ApiQuery({ name: 'lat', required: true, type: Number })
   @ApiQuery({ name: 'lon', required: true, type: Number })
@@ -36,10 +37,13 @@ export class EventsController {
   @ApiResponse({
     status: 200,
     description: 'Returns a list of events matching the search criteria',
+    type: [LiteEventDto],
   })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
-  searchEvents(@Query() searchEventsDto: SearchEventsDto) {
+  searchEvents(
+    @Query() searchEventsDto: SearchEventsDto,
+  ): Promise<LiteEventDto[]> {
     return this.eventsService.searchEvents(searchEventsDto);
   }
 }
