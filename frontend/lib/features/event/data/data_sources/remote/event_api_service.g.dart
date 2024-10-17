@@ -8,13 +8,13 @@ part of 'event_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
-class _EventPreviewApiService implements EventApiService {
-  _EventPreviewApiService(
+class _EventApiService implements EventApiService {
+  _EventApiService(
     this._dio, {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://localhost:4000/api';
+    baseUrl ??= 'http://192.168.1.107:3000/api';
   }
 
   final Dio _dio;
@@ -25,8 +25,8 @@ class _EventPreviewApiService implements EventApiService {
 
   @override
   Future<HttpResponse<List<EventPreviewModel>>> getEventPreviews({
-    double? lat,
-    double? lon,
+    num? lat,
+    num? lon,
     String? startDate,
     String? endDate,
   }) async {
@@ -48,7 +48,7 @@ class _EventPreviewApiService implements EventApiService {
     )
             .compose(
               _dio.options,
-              '/events/search',
+              '/events',
               queryParameters: queryParameters,
               data: _data,
             )

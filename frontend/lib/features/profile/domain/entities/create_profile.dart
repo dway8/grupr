@@ -1,12 +1,12 @@
-class Profile {
+class CreateProfile {
   final String firstName;
   final DateTime dateOfBirth;
   final String city;
-  final num latitude;
-  final num longitude;
+  final double latitude;
+  final double longitude;
   final String country;
 
-  Profile({
+  CreateProfile({
     required this.firstName,
     required this.dateOfBirth,
     required this.city,

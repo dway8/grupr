@@ -1,13 +1,15 @@
+import 'package:grupr/features/profile/domain/entities/create_profile.dart';
+
 import '../../../../core/resources/data_state.dart';
 import '../entities/profile.dart';
 import '../repositories/profile_repository.dart';
 
-class CreateProfile {
+class CreateProfileUseCase {
   final ProfileRepository repository;
 
-  CreateProfile(this.repository);
+  CreateProfileUseCase(this.repository);
 
-  Future<DataState<void>> call(Profile profile) async {
+  Future<DataState<void>> call(CreateProfile profile) async {
     return await repository.createProfile(profile);
   }
 }

@@ -11,6 +11,7 @@ import 'package:grupr/features/event/domain/usecases/get_event_previews.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
 import 'package:grupr/features/profile/data/data_sources/remote/profile_api_service.dart';
 import 'package:grupr/features/profile/domain/usecases/create_profile.dart';
+import 'package:grupr/features/profile/domain/usecases/get_user_profile.dart';
 import 'features/auth/domain/usecases/login.dart';
 import 'features/auth/domain/usecases/get_access_token.dart';
 import 'features/auth/domain/usecases/logout.dart';
@@ -28,7 +29,7 @@ Future<void> initializeDependencies() async {
   // Services
   sl.registerLazySingleton(() => AuthService());
   sl.registerLazySingleton(() => ProfileApiService(sl<ApiClient>()));
-  sl.registerSingleton<EventApiService>(EventApiService(sl()));
+  sl.registerLazySingleton(() => EventApiService(sl<ApiClient>()));
 
   // Initialize ApiClient and pass AuthService
   sl.registerSingleton<ApiClient>(ApiClient(sl<AuthService>()));
@@ -44,7 +45,8 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => Login(sl()));
   sl.registerLazySingleton(() => GetAccessToken(sl()));
   sl.registerLazySingleton(() => Logout(sl()));
-  sl.registerLazySingleton(() => CreateProfile(sl()));
+  sl.registerLazySingleton(() => CreateProfileUseCase(sl()));
+  sl.registerLazySingleton(() => GetUserProfileUseCase(sl()));
   sl.registerSingleton<GetEventPreviewsUseCase>(GetEventPreviewsUseCase(sl()));
 
   // Blocs

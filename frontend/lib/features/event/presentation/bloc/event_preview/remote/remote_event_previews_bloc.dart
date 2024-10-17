@@ -17,7 +17,7 @@ class RemoteEventPreviewsBloc
       GetEventPreviews event, Emitter<RemoteEventPreviewsState> emit) async {
     final dataState = await _getEventPreviewsUseCase();
 
-    if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
+    if (dataState is DataSuccess) {
       emit(RemoteEventPreviewsLoaded(dataState.data!));
     }
 

@@ -13,10 +13,13 @@ class EventRepositoryImpl implements EventRepository {
   @override
   Future<DataState<List<EventPreviewModel>>> getEventPreviews() async {
     try {
+      print('Fetching event previews');
       final httpResponse = await _eventApiService.getEventPreviews(
-        lat: 0.0,
-        lon: 0.0,
+        lat: 12,
+        lon: 14,
       );
+
+      print('Event previews response: ${httpResponse.response}');
 
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(httpResponse.data);

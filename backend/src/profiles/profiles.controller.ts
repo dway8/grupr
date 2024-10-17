@@ -1,4 +1,11 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  Get,
+} from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import {
@@ -8,6 +15,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { Profile } from '@prisma/client';
+import { ProfileResponseDto } from './dto/profile-response.dto';
 
 @ApiTags('profiles')
 @Controller('profiles')
@@ -27,6 +36,22 @@ export class ProfilesController {
     @Request() req,
     @Body() createProfileDto: CreateProfileDto,
   ) {
-    return this.profileService.createProfile(createProfileDto);
+    return this.profileService.createProfile(req.user.sub, createProfileDto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Get logged in user profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'The user profile has been successfully retrieved.',
+    type: ProfileResponseDto,
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @Get('me')
+  async getProfile(@Request() req): Promise<ProfileResponseDto | null> {
+    const profile = await this.profileService.getProfile(req.user.sub);
+    console.log(profile);
+    return profile;
   }
 }

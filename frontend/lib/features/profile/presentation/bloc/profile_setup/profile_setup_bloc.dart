@@ -1,12 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grupr/core/resources/data_state.dart';
+import 'package:grupr/features/profile/domain/entities/create_profile.dart';
 import 'package:grupr/features/profile/domain/usecases/create_profile.dart';
 import 'package:grupr/features/profile/domain/entities/profile.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile_setup/profile_setup_event.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile_setup/profile_setup_state.dart';
 
 class ProfileSetupBloc extends Bloc<ProfileSetupEvent, ProfileSetupState> {
-  final CreateProfile createProfile;
+  final CreateProfileUseCase createProfile;
   String? _firstName;
   String? _city;
   double? _latitude;
@@ -85,8 +86,7 @@ class ProfileSetupBloc extends Bloc<ProfileSetupEvent, ProfileSetupState> {
 
       emit(ProfileSetupLoading());
 
-      final profile = Profile(
-        userId: event.userId,
+      final profile = CreateProfile(
         firstName: _firstName!,
         dateOfBirth: _dateOfBirth!,
         city: _city!,

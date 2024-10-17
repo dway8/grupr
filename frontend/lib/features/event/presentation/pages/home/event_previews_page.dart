@@ -15,6 +15,7 @@ class EventPreviewsPage extends StatefulWidget {
 class EventPreviewsPageState extends State<EventPreviewsPage> {
   @override
   void initState() {
+    print('EventPreviewsPageState initState');
     super.initState();
     context.read<RemoteEventPreviewsBloc>().add(const GetEventPreviews());
   }
