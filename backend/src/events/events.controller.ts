@@ -41,9 +41,11 @@ export class EventsController {
   })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
-  searchEvents(
+  async searchEvents(
     @Query() searchEventsDto: SearchEventsDto,
   ): Promise<LiteEventDto[]> {
-    return this.eventsService.searchEvents(searchEventsDto);
+    const events = await this.eventsService.searchEvents(searchEventsDto);
+    console.log(events);
+    return events;
   }
 }

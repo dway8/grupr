@@ -15,7 +15,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { Profile } from '@prisma/client';
 import { ProfileResponseDto } from './dto/profile-response.dto';
 
 @ApiTags('profiles')

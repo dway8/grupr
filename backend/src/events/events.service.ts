@@ -12,12 +12,12 @@ export class EventsService {
   ): Promise<LiteEventDto[]> {
     const { lat, lon, startDate, endDate } = searchEventsDto;
 
-    const radius = 0.1;
+    const radius = 100000;
 
-    return this.prisma.event.findMany({
+    return await this.prisma.event.findMany({
       where: {
-        latitude: { gte: lat - radius, lte: lat + radius },
-        longitude: { gte: lon - radius, lte: lon + radius },
+        // latitude: { gte: lat - radius, lte: lat + radius },
+        // longitude: { gte: lon - radius, lte: lon + radius },
         ...(startDate && { date: { gte: new Date(startDate) } }),
         ...(endDate && { date: { lt: this.getNextDay(endDate) } }),
       },
