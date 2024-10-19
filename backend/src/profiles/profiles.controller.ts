@@ -5,9 +5,11 @@ import {
   UseGuards,
   Request,
   Get,
+  Put,
 } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -52,5 +54,22 @@ export class ProfilesController {
     const profile = await this.profileService.getProfile(req.user.sub);
     console.log(profile);
     return profile;
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Update user profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'The profile has been successfully updated.',
+    type: ProfileResponseDto,
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @Put('')
+  async updateProfile(
+    @Request() req,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ): Promise<ProfileResponseDto> {
+    return this.profileService.updateProfile(req.user.sub, updateProfileDto);
   }
 }

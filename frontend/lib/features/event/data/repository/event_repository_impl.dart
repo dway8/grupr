@@ -19,8 +19,6 @@ class EventRepositoryImpl implements EventRepository {
         lon: 14,
       );
 
-      print('Event previews response: ${httpResponse.response}');
-
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(httpResponse.data);
       } else {
