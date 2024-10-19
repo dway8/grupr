@@ -29,26 +29,23 @@ class ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Profile'),
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: const [
-              Tab(text: 'Preview'),
-              Tab(text: 'Edit'),
-            ],
-          ),
-        ),
-        body: TabBarView(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+        bottom: TabBar(
           controller: _tabController,
-          children: const [
-            ProfilePreview(),
-            ProfileEdit(),
+          tabs: const [
+            Tab(text: 'Preview'),
+            Tab(text: 'Edit'),
           ],
         ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          ProfilePreview(),
+          ProfileEdit(),
+        ],
       ),
     );
   }

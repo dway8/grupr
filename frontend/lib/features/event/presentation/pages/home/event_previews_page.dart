@@ -4,7 +4,6 @@ import 'package:grupr/features/event/domain/entities/event_preview.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_event.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_state.dart';
-import 'package:grupr/features/profile/presentation/pages/profile_page.dart';
 import 'package:intl/intl.dart';
 
 class EventPreviewsPage extends StatefulWidget {
@@ -23,81 +22,36 @@ class EventPreviewsPageState extends State<EventPreviewsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: _buildAppBar(),
-        body: _buildBody(),
-        bottomNavigationBar: _buildBottomBar(context),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Events', style: TextStyle(color: Colors.black)),
       ),
+      body: _buildBody(),
     );
   }
 
-  _buildAppBar() {
-    return AppBar(
-      title: const Text('Events', style: TextStyle(color: Colors.black)),
-    );
-  }
-
-  Widget _buildBottomBar(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
-            },
-            child: const Material(
-              elevation: 4,
-              shape: CircleBorder(),
-              child: CircleAvatar(
-                radius: 24,
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person, color: Colors.blueAccent),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildBody() {
+  Widget _buildBody() {
     return BlocBuilder<RemoteEventPreviewsBloc, RemoteEventPreviewsState>(
-        builder: (_, state) {
-      if (state is RemoteEventPreviewsLoading) {
-        return const Center(child: CircularProgressIndicator());
-      }
+      builder: (_, state) {
+        if (state is RemoteEventPreviewsLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-      if (state is RemoteEventPreviewsError) {
-        return const Center(child: Icon(Icons.refresh));
-      }
+        if (state is RemoteEventPreviewsError) {
+          return const Center(child: Icon(Icons.refresh));
+        }
 
-      if (state is RemoteEventPreviewsLoaded) {
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            return _buildEventPreview(state.eventPreviews![index]);
-          },
-          itemCount: state.eventPreviews!.length,
-        );
-      }
-      return const SizedBox();
-    });
+        if (state is RemoteEventPreviewsLoaded) {
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              return _buildEventPreview(state.eventPreviews![index]);
+            },
+            itemCount: state.eventPreviews!.length,
+          );
+        }
+        return const SizedBox();
+      },
+    );
   }
 
   Widget _buildEventPreview(EventPreviewEntity eventPreview) {

@@ -12,8 +12,10 @@ import 'package:grupr/features/profile/domain/usecases/update_profile.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile/profile_event.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile/profile_state.dart';
+import 'package:grupr/features/profile/presentation/pages/profile_page.dart';
 import 'package:grupr/features/profile/presentation/pages/profile_setup/profile_setup_page.dart';
 import 'package:grupr/injection_container.dart';
+import 'package:grupr/widgets/global_bottom_bar.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -45,23 +47,46 @@ class MyApp extends StatelessWidget {
               final profileBloc = BlocProvider.of<ProfileBloc>(context);
               profileBloc.add(FetchUserProfile());
 
-              return BlocBuilder<ProfileBloc, ProfileState>(
-                builder: (context, profileState) {
-                  print('Profile state: $profileState');
-                  if (profileState is ProfileLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (profileState is ProfileNotFound) {
-                    return ProfileSetupPage(userId: state.userId);
-                  } else if (profileState is ProfileLoaded) {
-                    return const EventPreviewsPage();
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
-              );
+              return const MainLayout();
             }
             return LoginPage();
           },
         ),
+      ),
+    );
+  }
+}
+
+class MainLayout extends StatefulWidget {
+  const MainLayout({Key? key}) : super(key: key);
+
+  @override
+  _MainLayoutState createState() => _MainLayoutState();
+}
+
+class _MainLayoutState extends State<MainLayout> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = const [
+    EventPreviewsPage(),
+    ProfilePage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: GlobalBottomBar(
+        selectedIndex: _selectedIndex,
+        onTap: (index) {
+          _onItemTapped(index);
+        },
       ),
     );
   }
