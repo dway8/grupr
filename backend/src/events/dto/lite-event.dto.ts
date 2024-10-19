@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsDate } from 'class-validator';
 
 export class LiteEventDto {
   @ApiProperty({ description: 'Unique identifier for the event' })
@@ -9,6 +9,10 @@ export class LiteEventDto {
   @ApiProperty({ description: 'Name of the event' })
   @IsString()
   name: string;
+
+  @ApiProperty({ description: 'Date of the event' })
+  @IsDate()
+  date: Date;
 
   @ApiProperty({ description: 'Latitude of the event location' })
   @IsNumber()

@@ -18,4 +18,8 @@ abstract class ProfileApiService {
 
   @GET('/profiles/me')
   Future<HttpResponse<ProfileModel>> fetchUserProfile();
+
+  @PUT('/profiles')
+  Future<HttpResponse<ProfileModel>> updateProfile(
+      @Body() ProfileModel profile);
 }

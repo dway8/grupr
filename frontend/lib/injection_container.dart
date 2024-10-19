@@ -12,6 +12,7 @@ import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remo
 import 'package:grupr/features/profile/data/data_sources/remote/profile_api_service.dart';
 import 'package:grupr/features/profile/domain/usecases/create_profile.dart';
 import 'package:grupr/features/profile/domain/usecases/get_user_profile.dart';
+import 'package:grupr/features/profile/domain/usecases/update_profile.dart';
 import 'features/auth/domain/usecases/login.dart';
 import 'features/auth/domain/usecases/get_access_token.dart';
 import 'features/auth/domain/usecases/logout.dart';
@@ -48,6 +49,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => CreateProfileUseCase(sl()));
   sl.registerLazySingleton(() => GetUserProfileUseCase(sl()));
   sl.registerSingleton<GetEventPreviewsUseCase>(GetEventPreviewsUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateProfileUseCase(sl()));
 
   // Blocs
   sl.registerFactory(() => AuthBloc(login: sl()));

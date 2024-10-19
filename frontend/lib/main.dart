@@ -8,6 +8,7 @@ import 'package:grupr/features/event/domain/usecases/get_event_previews.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
 import 'package:grupr/features/event/presentation/pages/home/event_previews_page.dart';
 import 'package:grupr/features/profile/domain/usecases/get_user_profile.dart';
+import 'package:grupr/features/profile/domain/usecases/update_profile.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile/profile_event.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile/profile_state.dart';
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
           create: (_) => RemoteEventPreviewsBloc(sl<GetEventPreviewsUseCase>()),
         ),
         BlocProvider<ProfileBloc>(
-          create: (_) => ProfileBloc(sl<GetUserProfileUseCase>()),
+          create: (_) => ProfileBloc(
+              sl<GetUserProfileUseCase>(), sl<UpdateProfileUseCase>()),
         ),
       ],
       child: MaterialApp(

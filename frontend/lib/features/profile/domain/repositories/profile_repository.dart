@@ -5,4 +5,5 @@ import 'package:grupr/features/profile/domain/entities/profile.dart';
 abstract class ProfileRepository {
   Future<DataState<void>> createProfile(CreateProfile profile);
   Future<DataState<Profile>> fetchUserProfile();
+  Future<DataState<Profile>> updateProfile(Profile profile);
 }

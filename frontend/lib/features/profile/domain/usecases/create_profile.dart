@@ -1,8 +1,6 @@
+import 'package:grupr/core/resources/data_state.dart';
 import 'package:grupr/features/profile/domain/entities/create_profile.dart';
-
-import '../../../../core/resources/data_state.dart';
-import '../entities/profile.dart';
-import '../repositories/profile_repository.dart';
+import 'package:grupr/features/profile/domain/repositories/profile_repository.dart';
 
 class CreateProfileUseCase {
   final ProfileRepository repository;

@@ -33,13 +33,20 @@ async function main() {
           location: faker.location.city(),
           latitude: faker.location.latitude(),
           longitude: faker.location.longitude(),
-          date: faker.date.future(),
+          date: setFixedHour(faker.date.future()),
           description: faker.lorem.paragraph(),
           userId: profile.userId,
         },
       });
     }
   }
+}
+
+function setFixedHour(date) {
+  const randomHour = faker.number.int({ min: 7, max: 24 });
+  const randomMinute = Math.random() < 0.5 ? 0 : 30;
+  date.setHours(randomHour === 24 ? 0 : randomHour, randomMinute, 0, 0);
+  return date;
 }
 
 function createProfile({ userId }) {

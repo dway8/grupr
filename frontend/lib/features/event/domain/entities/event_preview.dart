@@ -1,24 +1,20 @@
 import 'package:equatable/equatable.dart';
 
 class EventPreviewEntity extends Equatable {
-  final String id;
+  final int id;
   final String name;
-  final String? imageUrl;
-  final String date;
-  final String city;
+  final DateTime date;
   final num latitude;
   final num longitude;
-  final String createdAt;
+  final String? imageUrl;
 
   const EventPreviewEntity({
     required this.id,
     required this.name,
-    this.imageUrl,
     required this.date,
-    required this.city,
     required this.latitude,
     required this.longitude,
-    required this.createdAt,
+    this.imageUrl,
   });
 
   @override
@@ -26,12 +22,10 @@ class EventPreviewEntity extends Equatable {
     return [
       id,
       name,
-      imageUrl,
       date,
-      city,
       latitude,
       longitude,
-      createdAt,
+      imageUrl,
     ];
   }
 }

@@ -25,4 +25,15 @@ class ProfileModel {
       country: json['country'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'firstName': firstName,
+      'dateOfBirth': dateOfBirth.toIso8601String(),
+      'city': city,
+      'latitude': latitude,
+      'longitude': longitude,
+      'country': country,
+    };
+  }
 }

@@ -4,24 +4,20 @@ class EventPreviewModel extends EventPreviewEntity {
   const EventPreviewModel({
     required super.id,
     required super.name,
-    super.imageUrl,
     required super.date,
-    required super.city,
     required super.latitude,
     required super.longitude,
-    required super.createdAt,
+    super.imageUrl,
   });
 
   factory EventPreviewModel.fromJson(Map<String, dynamic> map) {
     return EventPreviewModel(
       id: map['id'],
       name: map['name'],
-      imageUrl: map['imageUrl'],
-      date: map['date'],
-      city: map['city'],
+      date: DateTime.parse(map['date']),
       latitude: map['latitude'],
       longitude: map['longitude'],
-      createdAt: map['createdAt'],
+      imageUrl: map['imageUrl'],
     );
   }
 
@@ -29,12 +25,10 @@ class EventPreviewModel extends EventPreviewEntity {
     return {
       'id': id,
       'name': name,
-      'imageUrl': imageUrl,
-      'date': date,
-      'city': city,
+      'date': date.toIso8601String(),
       'latitude': latitude,
       'longitude': longitude,
-      'createdAt': createdAt,
+      'imageUrl': imageUrl,
     };
   }
 }
