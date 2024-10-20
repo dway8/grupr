@@ -1,4 +1,12 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+  Post,
+  Body,
+  Request,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -10,6 +18,8 @@ import { EventsService } from './events.service';
 import { SearchEventsDto } from './dto/search-events.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { LiteEventDto } from './dto/lite-event.dto';
+import { EventDto } from './dto/event.dto';
+import { CreateEventDto } from './dto/create-event.dto';
 
 @ApiTags('events')
 @Controller('events')
@@ -47,5 +57,25 @@ export class EventsController {
     const events = await this.eventsService.searchEvents(searchEventsDto);
     console.log(events);
     return events;
+  }
+
+  @Post('')
+  @ApiOperation({ summary: 'Create a new event' })
+  @ApiResponse({
+    status: 201,
+    description: 'The event has been successfully created.',
+    type: EventDto,
+  })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async createEvent(
+    @Request() req,
+    @Body() createEventDto: CreateEventDto,
+  ): Promise<EventDto> {
+    const event = await this.eventsService.createEvent(
+      req.user.sub,
+      createEventDto,
+    );
+    return event;
   }
 }

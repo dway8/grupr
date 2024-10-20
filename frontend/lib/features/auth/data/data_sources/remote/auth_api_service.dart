@@ -59,8 +59,8 @@ class AuthService {
   }
 
   Future<String?> getAccessToken() async {
-    print('Getting access token');
     if (_accessToken != null) {
+      print('Access token is already set, returning it');
       return _accessToken;
     }
 
@@ -70,6 +70,7 @@ class AuthService {
     }
 
     try {
+      print('Fetching access token from auth0 with refresh token');
       final TokenResponse result = await _appAuth.token(
         TokenRequest(
           dotenv.env['AUTH0_CLIENT_ID']!,

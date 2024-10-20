@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SearchEventsDto } from './dto/search-events.dto';
 import { LiteEventDto } from './dto/lite-event.dto';
+import { CreateEventDto } from './dto/create-event.dto';
+import { EventDto } from './dto/event.dto';
 
 @Injectable()
 export class EventsService {
@@ -56,5 +58,32 @@ export class EventsService {
         date: 'asc',
       },
     });
+  }
+
+  async createEvent(
+    userId: string,
+    createEventDto: CreateEventDto,
+  ): Promise<EventDto> {
+    const event = await this.prisma.event.create({
+      data: {
+        userId,
+        name: createEventDto.name,
+        location: createEventDto.location,
+        date: new Date(createEventDto.date),
+        description: createEventDto.description,
+        latitude: createEventDto.latitude,
+        longitude: createEventDto.longitude,
+      },
+    });
+
+    return {
+      id: event.id,
+      name: event.name,
+      location: event.location,
+      date: event.date,
+      description: event.description,
+      latitude: event.latitude,
+      longitude: event.longitude,
+    };
   }
 }

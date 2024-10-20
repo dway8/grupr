@@ -1,5 +1,7 @@
 import 'package:grupr/core/constants/constants.dart';
 import 'package:grupr/core/network/api_client.dart';
+import 'package:grupr/features/event/data/models/event.dart';
+import 'package:grupr/features/event/data/models/event_creation.dart';
 import 'package:grupr/features/event/data/models/event_preview.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
@@ -21,4 +23,8 @@ abstract class EventApiService {
 
   @GET('/users/me/events')
   Future<HttpResponse<List<EventPreviewModel>>> getMyEvents();
+
+  @POST('/events')
+  Future<HttpResponse<EventModel>> createEvent(
+      @Body() EventCreationModel event);
 }

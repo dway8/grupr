@@ -4,6 +4,7 @@ import 'package:grupr/features/event/presentation/bloc/my_events/my_events_bloc.
 import 'package:grupr/features/event/presentation/bloc/my_events/my_events_event.dart';
 import 'package:grupr/features/event/presentation/bloc/my_events/my_events_state.dart';
 import 'package:grupr/features/event/presentation/widgets/event_preview_widget.dart';
+import 'package:grupr/features/event/presentation/pages/create_event_page.dart';
 
 class MyEventsPage extends StatefulWidget {
   const MyEventsPage({super.key});
@@ -24,6 +25,16 @@ class MyEventsPageState extends State<MyEventsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Events', style: TextStyle(color: Colors.black)),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => CreateEventPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: _buildBody(),
     );
