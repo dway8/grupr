@@ -18,4 +18,7 @@ abstract class EventApiService {
     @Query("startDate") String? startDate,
     @Query("endDate") String? endDate,
   });
+
+  @GET('/users/me/events')
+  Future<HttpResponse<List<EventPreviewModel>>> getMyEvents();
 }

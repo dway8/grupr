@@ -5,15 +5,17 @@ import 'package:grupr/config/theme/app_themes.dart';
 import 'package:grupr/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:grupr/features/auth/presentation/pages/login_page.dart';
 import 'package:grupr/features/event/domain/usecases/get_event_previews.dart';
+import 'package:grupr/features/event/domain/usecases/get_my_events.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
+import 'package:grupr/features/event/presentation/bloc/event_preview/my_events_bloc.dart';
+import 'package:grupr/features/event/presentation/bloc/my_events/my_events_bloc.dart';
 import 'package:grupr/features/event/presentation/pages/home/event_previews_page.dart';
+import 'package:grupr/features/event/presentation/pages/my_events_page.dart';
 import 'package:grupr/features/profile/domain/usecases/get_user_profile.dart';
 import 'package:grupr/features/profile/domain/usecases/update_profile.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile/profile_bloc.dart';
 import 'package:grupr/features/profile/presentation/bloc/profile/profile_event.dart';
-import 'package:grupr/features/profile/presentation/bloc/profile/profile_state.dart';
 import 'package:grupr/features/profile/presentation/pages/profile_page.dart';
-import 'package:grupr/features/profile/presentation/pages/profile_setup/profile_setup_page.dart';
 import 'package:grupr/injection_container.dart';
 import 'package:grupr/widgets/global_bottom_bar.dart';
 
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<AuthBloc>()),
         BlocProvider<RemoteEventPreviewsBloc>(
           create: (_) => RemoteEventPreviewsBloc(sl<GetEventPreviewsUseCase>()),
+        ),
+        BlocProvider<MyEventsBloc>(
+          create: (_) => MyEventsBloc(sl<GetMyEventsUseCase>()),
         ),
         BlocProvider<ProfileBloc>(
           create: (_) => ProfileBloc(
@@ -58,17 +63,18 @@ class MyApp extends StatelessWidget {
 }
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({Key? key}) : super(key: key);
+  const MainLayout({super.key});
 
   @override
-  _MainLayoutState createState() => _MainLayoutState();
+  MainLayoutState createState() => MainLayoutState();
 }
 
-class _MainLayoutState extends State<MainLayout> {
+class MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
     EventPreviewsPage(),
+    MyEventsPage(),
     ProfilePage(),
   ];
 

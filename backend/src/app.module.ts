@@ -8,6 +8,7 @@ import { ProfilesModule } from './profiles/profiles.module';
 import { EventsModule } from './events/events.module';
 import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './logger.middleware';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { LoggerMiddleware } from './logger.middleware';
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     EventsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

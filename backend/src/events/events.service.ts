@@ -40,4 +40,21 @@ export class EventsService {
     date.setDate(date.getDate() + 1);
     return date;
   }
+
+  async getEventsByUserId(userId: string): Promise<LiteEventDto[]> {
+    return await this.prisma.event.findMany({
+      where: { userId },
+      select: {
+        id: true,
+        name: true,
+        date: true,
+        latitude: true,
+        longitude: true,
+        imageUrl: true,
+      },
+      orderBy: {
+        date: 'asc',
+      },
+    });
+  }
 }

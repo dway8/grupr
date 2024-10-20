@@ -8,7 +8,9 @@ import 'package:grupr/features/event/data/data_sources/remote/event_api_service.
 import 'package:grupr/features/event/data/repository/event_repository_impl.dart';
 import 'package:grupr/features/event/domain/repository/event_repository.dart';
 import 'package:grupr/features/event/domain/usecases/get_event_previews.dart';
+import 'package:grupr/features/event/domain/usecases/get_my_events.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
+import 'package:grupr/features/event/presentation/bloc/my_events/my_events_bloc.dart';
 import 'package:grupr/features/profile/data/data_sources/remote/profile_api_service.dart';
 import 'package:grupr/features/profile/domain/usecases/create_profile.dart';
 import 'package:grupr/features/profile/domain/usecases/get_user_profile.dart';
@@ -50,10 +52,12 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => GetUserProfileUseCase(sl()));
   sl.registerSingleton<GetEventPreviewsUseCase>(GetEventPreviewsUseCase(sl()));
   sl.registerLazySingleton(() => UpdateProfileUseCase(sl()));
+  sl.registerLazySingleton(() => GetMyEventsUseCase(sl()));
 
   // Blocs
   sl.registerFactory(() => AuthBloc(login: sl()));
   sl.registerFactory(() => ProfileSetupBloc(createProfile: sl()));
   sl.registerFactory<RemoteEventPreviewsBloc>(
       () => RemoteEventPreviewsBloc(sl()));
+  sl.registerFactory(() => MyEventsBloc(sl<GetMyEventsUseCase>()));
 }
