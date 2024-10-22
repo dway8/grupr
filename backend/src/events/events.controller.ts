@@ -2,10 +2,12 @@ import {
   Controller,
   Get,
   Query,
+  Param,
   UseGuards,
   Post,
   Body,
   Request,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -76,6 +78,23 @@ export class EventsController {
       req.user.sub,
       createEventDto,
     );
+    return event;
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Fetch an event by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the event details',
+    type: EventDto,
+  })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async getEventById(@Param('id') id: number): Promise<EventDto> {
+    const event = await this.eventsService.getEventById(id);
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
     return event;
   }
 }

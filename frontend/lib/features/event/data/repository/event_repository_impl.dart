@@ -46,6 +46,14 @@ class EventRepositoryImpl extends BaseRepository implements EventRepository {
         requestType: 'Create Event');
   }
 
+  @override
+  Future<DataState<EventEntity>> getEvent(int eventId) async {
+    return await handleRequest(() async {
+      return await _eventApiService.getEvent(eventId);
+    }, (model) => _mapEventDataModelToDomainEntity(model),
+        requestType: 'Get Event');
+  }
+
   EventEntity _mapEventDataModelToDomainEntity(EventModel model) {
     return EventEntity(
       id: model.id,

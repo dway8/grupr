@@ -7,4 +7,5 @@ abstract class EventRepository {
   Future<DataState<List<EventPreviewEntity>>> getEventPreviews();
   Future<DataState<List<EventPreviewEntity>>> getMyEvents();
   Future<DataState<EventEntity>> createEvent(EventCreationEntity event);
+  Future<DataState<EventEntity>> getEvent(int eventId);
 }

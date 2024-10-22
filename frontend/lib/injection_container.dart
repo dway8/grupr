@@ -8,9 +8,11 @@ import 'package:grupr/features/event/data/data_sources/remote/event_api_service.
 import 'package:grupr/features/event/data/repository/event_repository_impl.dart';
 import 'package:grupr/features/event/domain/repository/event_repository.dart';
 import 'package:grupr/features/event/domain/usecases/create_event.dart';
+import 'package:grupr/features/event/domain/usecases/get_event.dart';
 import 'package:grupr/features/event/domain/usecases/get_event_previews.dart';
 import 'package:grupr/features/event/domain/usecases/get_my_events.dart';
 import 'package:grupr/features/event/presentation/bloc/create_event/create_event_bloc.dart';
+import 'package:grupr/features/event/presentation/bloc/event/event_bloc.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
 import 'package:grupr/features/event/presentation/bloc/my_events/my_events_bloc.dart';
 import 'package:grupr/features/profile/data/data_sources/remote/profile_api_service.dart';
@@ -56,6 +58,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => UpdateProfileUseCase(sl()));
   sl.registerLazySingleton(() => GetMyEventsUseCase(sl()));
   sl.registerLazySingleton(() => CreateEventUseCase(sl()));
+  sl.registerLazySingleton(() => GetEventUseCase(sl()));
 
   // Blocs
   sl.registerFactory(() => AuthBloc(login: sl()));
@@ -64,4 +67,5 @@ Future<void> initializeDependencies() async {
       () => RemoteEventPreviewsBloc(sl()));
   sl.registerFactory(() => MyEventsBloc(sl<GetMyEventsUseCase>()));
   sl.registerFactory(() => CreateEventBloc(sl<CreateEventUseCase>()));
+  sl.registerFactory(() => EventBloc(sl<GetEventUseCase>()));
 }

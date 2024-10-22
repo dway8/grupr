@@ -5,9 +5,11 @@ import 'package:grupr/config/theme/app_themes.dart';
 import 'package:grupr/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:grupr/features/auth/presentation/pages/login_page.dart';
 import 'package:grupr/features/event/domain/usecases/create_event.dart';
+import 'package:grupr/features/event/domain/usecases/get_event.dart';
 import 'package:grupr/features/event/domain/usecases/get_event_previews.dart';
 import 'package:grupr/features/event/domain/usecases/get_my_events.dart';
 import 'package:grupr/features/event/presentation/bloc/create_event/create_event_bloc.dart';
+import 'package:grupr/features/event/presentation/bloc/event/event_bloc.dart';
 import 'package:grupr/features/event/presentation/bloc/event_preview/remote/remote_event_previews_bloc.dart';
 import 'package:grupr/features/event/presentation/bloc/my_events/my_events_bloc.dart';
 import 'package:grupr/features/event/presentation/pages/home/event_previews_page.dart';
@@ -46,6 +48,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CreateEventBloc>(
           create: (context) => CreateEventBloc(sl<CreateEventUseCase>()),
+        ),
+        BlocProvider(
+          create: (context) => EventBloc(sl<GetEventUseCase>()),
         ),
       ],
       child: MaterialApp(

@@ -86,4 +86,22 @@ export class EventsService {
       longitude: event.longitude,
     };
   }
+
+  async getEventById(id: number): Promise<EventDto | null> {
+    const event = await this.prisma.event.findUnique({
+      where: { id },
+    });
+
+    return event
+      ? {
+          id: event.id,
+          name: event.name,
+          location: event.location,
+          date: event.date,
+          description: event.description,
+          latitude: event.latitude,
+          longitude: event.longitude,
+        }
+      : null;
+  }
 }

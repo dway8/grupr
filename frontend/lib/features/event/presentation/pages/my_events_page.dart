@@ -30,7 +30,8 @@ class MyEventsPageState extends State<MyEventsPage> {
             icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CreateEventPage()),
+                MaterialPageRoute(
+                    builder: (context) => const CreateEventPage()),
               );
             },
           ),

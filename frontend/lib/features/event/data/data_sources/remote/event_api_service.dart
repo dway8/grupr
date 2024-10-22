@@ -27,4 +27,7 @@ abstract class EventApiService {
   @POST('/events')
   Future<HttpResponse<EventModel>> createEvent(
       @Body() EventCreationModel event);
+
+  @GET('/events/{id}')
+  Future<HttpResponse<EventModel>> getEvent(@Path("id") int id);
 }

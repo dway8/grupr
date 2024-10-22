@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grupr/features/event/domain/entities/event_preview.dart';
+import 'package:grupr/features/event/presentation/pages/event_page.dart';
 import 'package:intl/intl.dart';
 
 class EventPreviewWidget extends StatelessWidget {
@@ -14,7 +15,12 @@ class EventPreviewWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // TODO: Navigate to the event page
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventPage(eventId: eventPreview.id),
+          ),
+        );
       },
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
